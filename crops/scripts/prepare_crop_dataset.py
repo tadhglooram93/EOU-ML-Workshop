@@ -241,7 +241,7 @@ def main() -> None:
         for split_name, split_images in split_map.items():
             summary[class_name][split_name] = 0
             for i, src in enumerate(split_images):
-                dst = output_dir / split_name / class_name / f"{class_name}_{i:04d}.jpg"
+                dst = args.output_dir / split_name / class_name / f"{class_name}_{i:04d}.jpg"
                 original_size = process_image(src, dst, args.image_size, args.jpeg_quality)
                 if original_size is None:
                     continue

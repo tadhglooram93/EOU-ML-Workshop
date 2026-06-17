@@ -1,181 +1,116 @@
+# 💧 Can AI Predict Irrigation?
 
+A beginner-friendly machine learning activity for the Farm + AI workshop.
+Students use recent weather data to train a small model that predicts how much
+irrigation a field needed. **No coding or AI background needed.**
 
-## Find lat lon of area we want to collect weather data
-https://www.gps-coordinates.net/
+This is an educational demo only. It is not meant to make real irrigation
+decisions.
 
+> 🔗 **Launch in Binder:** _[add Binder link here]_
 
-# Farm Irrigation Machine Learning Workshop
+## The question we explore
 
-This repo contains a simple machine learning activity for students learning how data can help explain real agricultural decisions.
+> Can we use recent weather to predict how much irrigation happened on a farm?
 
-Students will visit a farm, learn about center pivot irrigation, collect a field temperature measurement, and then use weather + irrigation data to train a small model that predicts irrigation amount.
+Along the way, students discover one of the most important ideas in machine
+learning:
 
-This is an educational demo only. It is not meant to make real irrigation decisions.
+> **Good clues (features) matter more than a fancy model.**
 
-## Project Goal
+## The good-clues vs junk-clues lesson
 
-We want to answer a simple question:
+The notebook gives students two kinds of "clues" to choose from:
 
-> Can we use recent weather data to predict how much irrigation happened on a farm?
+- **Good clues** — real weather measurements that actually relate to irrigation.
+- **Junk clues** — silly made-up numbers that have nothing to do with water.
 
-The model will learn from historical data like:
+The first models are trained **on purpose** with only the junk clues, so they do
+a bad job. Students then swap in the good clues and watch the score jump. The
+takeaway: even a powerful model cannot fix bad data.
 
-* Temperature
-* Humidity
-* Wind
-* Rain
-* Past irrigation
-* Actual irrigation amount from the farmer
+### Good clues (used by the model)
 
-Then we will use the weather from the day of the farm visit to predict that day's irrigation and compare it to what actually happened.
+| Variable            | What it measures                              | Why it matters                          |
+| ------------------- | --------------------------------------------- | --------------------------------------- |
+| `max_temp_f`        | Highest temperature that day                  | Hotter days usually need more water     |
+| `mean_humidity_pct` | Average humidity                              | Dry air increases water loss            |
+| `avg_wind_mph`      | Average wind speed                            | Wind dries out the field                |
+| `precip_in`         | Rain that day                                | Rain means less irrigation is needed    |
+| `temp_3day_avg_f`   | Average temperature over the last 3 days       | A "moving average" that captures recent heat |
 
-## Repo Structure
+### Junk clues (added on purpose, totally useless)
 
-```text
-farm-irrigation-ml/
-├── README.md
-├── requirements.txt
-└── utils/
-|   ├── weather.py
-├── irrigation_model.ipynb
-└── data/
-    ├── weather.csv
-    ├── irrigation.csv
-    └── merged_irrigation_weather.csv
-```
+| Variable             | What it measures                  |
+| -------------------- | --------------------------------- |
+| `lucky_number`       | The farmer's lucky number         |
+| `barn_cat_naps`      | How many naps the barn cat took   |
+| `dice_roll`          | A roll of a six-sided dice        |
+| `tractor_color_code` | A code for the tractor's color    |
+| `songs_on_radio`     | Songs played on the tractor radio |
 
-## Dataset
+## What students do
 
-The main dataset is one row per day.
+1. Explore the data and plot weather against irrigation.
+2. Use a dropdown to see which clues show a real pattern and which look random.
+3. Train **Linear Regression** and a **small Neural Network** — first with junk
+   clues (bad results), then with good clues (better results).
+4. Read the score: **Mean Absolute Error (MAE)** and **R²**.
+5. Enter today's weather and ask the model to predict irrigation.
 
-Each row represents:
-
-> Weather conditions for a day + how much irrigation happened that day.
-
-Example:
-
-| date       | max_temp_f | mean_humidity_pct | precip_in | avg_wind_mph | irrigation_amount |
-| ---------- | ---------: | ----------------: | --------: | -----------: | ----------------: |
-| 2024-06-01 |       84.2 |              41.5 |      0.00 |          7.4 |              0.25 |
-| 2024-06-02 |       88.1 |              36.2 |      0.00 |          9.1 |              0.30 |
-| 2024-06-03 |       76.5 |              58.7 |      0.12 |          5.8 |              0.00 |
-
-## Raw Variables
-
-These are the original variables we may collect from weather data or the farmer.
-
-| Variable              | What it measures                                                               | Why it matters                                                         |
-| --------------------- | ------------------------------------------------------------------------------ | ---------------------------------------------------------------------- |
-| `date`                | The calendar date for the row                                                  | Lets us match weather and irrigation for the same day                  |
-| `max_temp_f`          | Highest air temperature that day, in Fahrenheit                                | Hotter days usually increase crop water demand                         |
-| `min_temp_f`          | Lowest air temperature that day, in Fahrenheit                                 | Helps describe daily temperature range                                 |
-| `mean_temp_f`         | Average air temperature that day, in Fahrenheit                                | A general measure of how warm the day was                              |
-| `student_temp_f`      | Temperature collected by students during the farm visit                        | Lets students connect their field measurement to the model             |
-| `mean_humidity_pct`   | Average relative humidity for the day, as a percent                            | Dry air can increase water loss from soil and plants                   |
-| `precip_in`           | Total precipitation for the day, in inches                                     | Rain can reduce or delay the need for irrigation                       |
-| `avg_wind_mph`        | Average wind speed for the day, in miles per hour                              | Wind can increase evaporation and affect irrigation efficiency         |
-| `max_wind_mph`        | Highest wind speed or gust for the day                                         | Very windy days may affect irrigation decisions                        |
-| `et0_in`              | Reference evapotranspiration, in inches                                        | Estimate of how much water could be lost from a reference crop surface |
-| `irrigation_amount`   | Amount of irrigation applied that day                                          | This is the value the model tries to predict                           |
-| `irrigation_unit`     | Unit for irrigation amount, such as inches, hours, gallons, or percent setting | Helps us interpret the target correctly                                |
-| `pivot_runtime_hours` | Number of hours the pivot ran, if available                                    | Another way to measure irrigation activity                             |
-| `pivot_speed_pct`     | Pivot speed or percent setting, if available                                   | A setting that may control how much water is applied                   |
-| `field_name`          | Field or crop name, if there are multiple fields                               | Different fields or crops may need different water amounts             |
-| `notes`               | Farmer notes about unusual days                                                | Helps identify days that may confuse the model                         |
-
-## Engineered Variables
-
-Engineered variables are new columns we create from the raw data.
-
-They help the model understand patterns over time.
-
-| Variable                     | What it measures                                                            | Why it matters                                                |
-| ---------------------------- | --------------------------------------------------------------------------- | ------------------------------------------------------------- |
-| `temp_3day_avg_f`            | Average temperature over the current day and previous 2 days                | Farmers may respond to several hot days, not just one hot day |
-| `temp_5day_avg_f`            | Average temperature over the current day and previous 4 days                | Captures longer heat trends                                   |
-| `precip_3day_sum_in`         | Total rain over the current day and previous 2 days                         | Recent rain may reduce irrigation need                        |
-| `precip_5day_sum_in`         | Total rain over the current day and previous 4 days                         | Captures longer wet periods                                   |
-| `wind_3day_avg_mph`          | Average wind speed over the current day and previous 2 days                 | Windy stretches may increase water loss                       |
-| `et0_3day_sum_in`            | Total reference evapotranspiration over the current day and previous 2 days | Estimates recent atmospheric water demand                     |
-| `days_since_rain`            | Number of days since measurable rainfall                                    | Longer dry periods may increase irrigation need               |
-| `previous_irrigation_amount` | Irrigation amount from the previous day                                     | Farmers may avoid irrigating the same way every day           |
-| `days_since_irrigation`      | Number of days since the field was last irrigated                           | Helps model irrigation timing                                 |
-| `day_of_year`                | Day number within the year, from 1 to 365                                   | Captures seasonal changes                                     |
-| `month`                      | Month number, from 1 to 12                                                  | Simpler version of seasonality                                |
-
-## Prediction Target
-
-The main prediction target is:
+## The prediction target
 
 ```text
 irrigation_amount
 ```
 
-This is what the model is trying to predict.
+This is a practice target: a simple estimate of how much water the field needed
+that day (roughly water lost to the weather minus the rain that fell). It is not
+real farmer irrigation, just a good way to test the models.
 
-Depending on the farmer's data, this could mean:
+## How to run
 
-* Inches of water applied
-* Hours the pivot ran
-* Gallons of water used
-* Pivot speed or percent setting
-* Whether irrigation happened at all
+The notebook is designed for **Binder** (use the link above) so students don't
+have to install anything. To run it locally instead:
 
-If we only have yes/no irrigation data, the problem becomes a classification task:
-
-```text
-Did irrigation happen today?
-Yes or No
+```bash
+cd water
+python -m venv venv
+source venv/bin/activate      # Windows: venv\Scripts\activate
+pip install -r requirements.txt
+jupyter notebook irrigation_model.ipynb
 ```
 
-If we have amount data, the problem becomes a regression task:
+## Folder structure
 
 ```text
-How much irrigation happened today?
+water/
+├── irrigation_model.ipynb        # the student notebook
+├── requirements.txt
+├── data/
+│   ├── model_dataset.csv         # one row per day: weather + irrigation_amount
+│   ├── model_metadata.json       # target and column info
+│   └── weather.csv               # raw daily weather
+└── scripts/
+    ├── weather.py                # fetch daily weather for a location
+    ├── build_model_dataset.py    # build the model-ready dataset
+    └── find_best_features_pycaret.py  # (instructor) feature exploration
 ```
 
-## Models We May Try
+> Tip: find the latitude/longitude for a field at
+> [gps-coordinates.net](https://www.gps-coordinates.net/) when collecting weather.
 
-We will start simple.
-
-Possible models:
-
-1. Linear Regression
-   Learns a simple formula from the data.
-
-2. Random Forest
-   Learns more flexible patterns and can handle nonlinear relationships.
-
-3. Small Neural Network
-   A simple example of the kind of model students may have heard about in AI.
-
-The goal is not to build the most accurate model. The goal is to understand how data becomes a prediction.
-
-## Student Activity
-
-Students will:
-
-1. Look at the farm and pivot irrigation system.
-2. Collect a temperature measurement.
-3. Load historical weather and irrigation data.
-4. Create simple features like rolling average temperature.
-5. Train a model.
-6. Test the model on past days.
-7. Predict irrigation for the day of the farm visit.
-8. Compare the model's prediction to what actually happened.
-
-## Big Ideas
+## Big ideas
 
 By the end, students should understand:
 
-* Machine learning learns from examples.
-* The quality of the data matters.
-* Weather affects irrigation decisions, but it is not the whole story.
-* Models can be useful and still be imperfect.
-* Real-world decisions often include human judgment, equipment limits, and context that may not appear in the data.
+- Machine learning learns patterns from examples.
+- The quality of the data (the clues you pick) matters a lot.
+- Weather affects irrigation, but it is not the whole story.
+- Models can be useful and still be imperfect.
 
-## Important Note
+## Important note
 
-This project is for learning only.
-
-Actual irrigation decisions should be made by farmers, agronomists, irrigation specialists, and appropriate farm management systems.
+This project is for learning only. Actual irrigation decisions should be made by
+farmers, agronomists, irrigation specialists, and appropriate farm management
+systems.
