@@ -7,7 +7,7 @@ irrigation a field needed. **No coding or AI background needed.**
 This is an educational demo only. It is not meant to make real irrigation
 decisions.
 
-> 🔗 **Launch in Binder:** _[add Binder link here]_
+> 🔗 **Launch in Binder:** https://hub.2i2c.mybinder.org/user/tadhglooram93-eou-ml-workshop-3xsh1qbu/doc/tree/water/irrigation_model.ipynb
 
 ## The question we explore
 

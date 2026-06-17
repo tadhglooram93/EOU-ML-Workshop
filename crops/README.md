@@ -9,7 +9,7 @@ that looks at a crop photo and predicts one of two labels:
 This is an educational demo for the Farm + AI workshop. It is not meant to make
 real agricultural decisions.
 
-> 🔗 **Launch in Binder:** _[add Binder link here]_
+> 🔗 **Launch in Binder:** https://hub.2i2c.mybinder.org/user/tadhglooram93-eou-ml-workshop-dbd9r2ng/doc/tree/crops/crop_classifier_mobilenetv2.ipynb
 
 ## Big idea
 
