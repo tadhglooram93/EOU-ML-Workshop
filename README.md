@@ -36,7 +36,8 @@ weather clues against silly "junk" clues like a lucky number or a dice roll.
 - Models: Linear Regression and a small Neural Network
 - Folder: [`water/`](water/) · details in [`water/README.md`](water/README.md)
 
-> 🔗 **Launch in Binder:** https://hub.gesis.mybinder.org/user/tadhglooram93-eou-ml-workshop-wci25ink/doc/workspaces/auto-5/tree/water/irrigation_model.ipynb
+> 🔗 **Launch in Binder:** 
+https://hub.2i2c.mybinder.org/user/tadhglooram93-eou-ml-workshop-a4p1vps4/doc/tree/water/irrigation_model.ipynb
 
 ---
 

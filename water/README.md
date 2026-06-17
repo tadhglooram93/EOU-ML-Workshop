@@ -8,7 +8,7 @@ This is an educational demo only. It is not meant to make real irrigation
 decisions.
 
 > 🔗 **Launch in Binder:** 
-https://hub.gesis.mybinder.org/user/tadhglooram93-eou-ml-workshop-wci25ink/doc/workspaces/auto-5/tree/water/irrigation_model.ipynb
+https://hub.2i2c.mybinder.org/user/tadhglooram93-eou-ml-workshop-a4p1vps4/doc/tree/water/irrigation_model.ipynb
 
 ## The question we explore
 
