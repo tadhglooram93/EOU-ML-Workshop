@@ -1,0 +1,28 @@
+{
+  "target_col": "irrigation_amount",
+  "target_type": "proxy_et0_minus_precip",
+  "feature_cols": [
+    "max_temp_f",
+    "min_temp_f",
+    "mean_temp_f",
+    "mean_humidity_pct",
+    "precip_in",
+    "avg_wind_mph",
+    "max_wind_mph",
+    "temp_3day_avg_f",
+    "temp_5day_avg_f",
+    "precip_3day_sum_in",
+    "precip_5day_sum_in",
+    "wind_3day_avg_mph",
+    "days_since_rain",
+    "previous_irrigation_amount",
+    "days_since_irrigation",
+    "day_of_year",
+    "month"
+  ],
+  "using_proxy_target": true,
+  "rows": 2192,
+  "date_min": "2020-06-14",
+  "date_max": "2026-06-14",
+  "notes": "If using_proxy_target is true, irrigation_amount is a proxy equal to max(et0_in - precip_in, 0), not real farmer irrigation."
+}
